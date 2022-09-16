@@ -2,6 +2,7 @@
 
 useImageSearch = 0 ; Set to 1 to use Image Search macros
 grico = 0 ; indicates if pocket grico was used
+spell = 0 ; 0=incite, 1=bb, 2=ruby
 
 ;F23::Ctrl
 ;F24::Shift
@@ -9,6 +10,7 @@ grico = 0 ; indicates if pocket grico was used
 SetKeyDelay, 20, 0
 
 F9:: ; Brid armor switch
+	grico = 0
 	Send {F8} {F3} {F4} {F5} {F6} {F7}
 	Return
 
@@ -65,6 +67,7 @@ F9:: ; Brid armor switch
 	else{
 		Send ^w ^t
 	}
+	Return
 
 ^d:: ; 2nd MH + OH
 	KeyWait d
@@ -125,7 +128,7 @@ F9:: ; Brid armor switch
 ;	Send ^w ^t +t
 ;	Return
 	
-;;+r:: ; SH swap + Divert
+;+r:: ; SH swap + Divert
 ;	KeyWait Shift
 ;	Send ^w ^t +r
 ;	Return
@@ -136,9 +139,7 @@ F9:: ; Brid armor switch
 	Return
 
 =:: ; backwards tc + sc + omni
-	Send z j m
-	Sleep 50
-	Send ^f
+	Send z j m ^f
 	Return
 	
 .:: ; double mine
@@ -148,11 +149,58 @@ F9:: ; Brid armor switch
 	Return
 		
 -:: ; call familiar + spec
-	KeyWait Control
 	MouseGetPos, X, Y
+	BlockInput, MouseMove
 	MouseClick, Left, 1713, 759, 1, 0
-	Send {NumpadSub}
 	MouseMove X, Y, 0
+	BlockInput, MouseMoveOff
+	Send {NumpadSub}
 	Return
 
+^1:: ; Incite fear
+	if(spell != 0){
+		MouseGetPos, X, Y
+		BlockInput, MouseMove
+		MouseClick, Right, 1655, 1057, 1, 0
+		MouseClick, Left
+		MouseMove X, Y, 0
+		BlockInput, MouseMoveOff
+		spell = 0
+	}
+	Return
 
+^2:: ; bb
+	if(spell != 1){
+		MouseGetPos, X, Y
+		BlockInput, MouseMove
+		MouseClick, Right, 1545, 1057, 1, 0
+		MouseClick, Left
+		MouseMove X, Y, 0
+		BlockInput, MouseMoveOff
+		spell = 1
+	}
+	Return
+	
+^3::
+	if(spell != 2){
+		MouseGetPos, X, Y
+		BlockInput, MouseMove
+		MouseClick, Right, 1652, 988, 1, 0
+		MouseClick, Left, 1652, 1027, 1, 0
+		MouseMove X, Y, 0
+		BlockInput, MouseMoveOff
+		spell = 2
+	}
+	Return
+	
+^4:: ; ice barr
+	if(spell != 3){
+		MouseGetPos, X, Y
+		BlockInput, MouseMove
+		MouseClick, Right, 1585, 1057, 1, 0
+		MouseClick, Left
+		MouseMove X, Y, 0
+		BlockInput, MouseMoveOff
+		spell = 3
+	}
+	Return
