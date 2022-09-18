@@ -1,20 +1,21 @@
+; ----- ENVIRONMENT SETUP -----
 #IfWinActive RuneScape
-
-useImageSearch = 0 ; Set to 1 to use Image Search macros
-grico = 0 ; indicates if pocket grico was used
-spell = 0 ; 0=incite, 1=bb, 2=ruby
-
-;F23::Ctrl
-;F24::Shift
-
 SetKeyDelay, 20, 0
+
+; ---------- BINDS DEFINITIONS DEFINES ----------
+TWOHAND = ^q
+
+; ----- PRIVATE GLOBAL VARIABLES -----
+_grico = 0 ; indicates if pocket grico was used
+_spell = 0 ; 0=incite, 1=bb, 2=ruby
+
 
 F9:: ; Brid armor switch
 	grico = 0
 	Send {F8} {F3} {F4} {F5} {F6} {F7}
 	Return
 
-^q:: ; 2H
+TWOHAND:: ; 2H
 	Keywait q
 	if(grico = 1){
 		Send ^q ^=

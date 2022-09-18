@@ -11,7 +11,7 @@ SetKeyDelay 20,0 ; Do not change
 
 ; This macro fixes RuneScape's modifier key bug where if you unpress Mod (ctrl/shift/alt) key before the key, the game will register : (Mod + key) -> (key)
 
-!q:: ; you can add other modifier key fixes, 
+!q:: ; you can add other modifier key fixes
 	KeyWait q
-	Send !q
+	Send !q {Alt Up}
 	Return
