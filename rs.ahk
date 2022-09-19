@@ -9,6 +9,10 @@ spell = 0 ; 0=incite, 1=bb, 2=ruby
 
 SetKeyDelay, 20, 0
 
+^0:: ; Quit RS3, especially useful for fullscreen mode
+	Process, Close, rs2client.exe
+	Return
+
 F9:: ; Brid armor switch
 	grico = 0
 	Send {F8} {F3} {F4} {F5} {F6} {F7}
