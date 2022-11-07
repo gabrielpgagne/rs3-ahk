@@ -1,11 +1,11 @@
+I_Icon = %A_ScriptDir%\res\rs.ico
+IfExist, %I_Icon%
+	Menu, Tray, Icon, %I_Icon%
+
 #IfWinActive RuneScape
 
-useImageSearch = 0 ; Set to 1 to use Image Search macros
 grico = 0 ; indicates if pocket grico was used
-spell = 0 ; 0=incite, 1=bb, 2=ruby
-
-;F23::Ctrl
-;F24::Shift
+spell = 0 ; 0=incite, 1=bb, 2=ruby, 4=ice barr
 
 SetKeyDelay, 20, 0
 
@@ -14,94 +14,103 @@ SetKeyDelay, 20, 0
 	Return
 
 F9:: ; Brid armor switch
+label_bridswitch:
 	grico = 0
-	Send {F8} {F3} {F4} {F5} {F6} {F7}
+	SendInput {F8}{F3}{F4}{F5}{F6}{F7}
 	Return
+
+F10:: ; switch to melee armor + equip cbow
+	Gosub, label_bridswitch
+	Sleep, 25
+	Gosub, label_grico
+	Return
+
 
 ^q:: ; 2H
 	Keywait q
 	if(grico = 1){
-		Send ^q ^=
+		SendInput ^q^=
 		grico = 0
 	}
 	else{
-		Send ^q
+		SendInput ^q
 	}	
 	Return
 
 ^w:: ; MH
 	Keywait w
 	if(grico = 1){
-		Send ^w ^=
+		SendInput ^w^=
 		grico = 0
 	}
 	else{
-		Send ^w
+		SendInput ^w
 	}
 	Return
 	
 ^e:: ; MH + OH
 	KeyWait e
 	if(grico = 1){
-		Send ^w ^e ^=
+		SendInput ^w^e^=
 		grico = 0
 	}
 	else{
-		Send ^w ^e
+		SendInput ^w^e
 	}
 	Return
 
 ^r:: 
-	Keywait r
+	KeyWait r
 	if(grico = 1){
-		Send ^r ^=
+		SendInput ^r^=
 		grico = 0
 	}
 	else{
-		Send ^r
+		SendInput ^r
 	}
 	Return
 
 ^t:: ; MH + Defender (PF)
 	KeyWait t
 	if(grico = 1){
-		Send ^w ^t ^=
+		SendInput ^w^t^=
 		grico = 0
 	}
 	else{
-		Send ^w ^t
+		SendInput ^w^t
 	}
 	Return
 
 ^d:: ; 2nd MH + OH
 	KeyWait d
 	if(grico = 1){
-		Send ^d ^e ^=
+		SendInput ^d^e^=
 		grico = 0
 	}
 	else{
-		Send ^d ^e
+		SendInput ^d^e
 	}
 	Return
 	
 ^s:: ; MH + Flank
 	KeyWait s
 	if(grico = 1){
-		Send ^w ^s ^=
+		SendInput ^w^s^=
 		grico = 0
 	}
 	else{
-		Send ^w ^s
+		SendInput ^w^s
 	}
 	Return
 
 ^v:: ; Pocket grico
+label_grico:
 	KeyWait v
 	if(grico = 0){
-		Send ^v  ^-
+		SendInput ^v^-
 	}
 	else{
-		Send ^v
+		SendInput ^v
 	}
 	grico = 1
 	Return
@@ -109,58 +118,45 @@ F9:: ; Brid armor switch
 
 ^5:: ; Excal
 	Keywait 5
-	Send ^5
+	SendInput ^5
 	Return
 	
 ;6:: ; BD MH+OH + BD
-;	Send ^6 ^5 {Control Up}
+;	SendInput ^6^5{Control Up}
 ;	Sleep(25):
-;	Send 6
+;	SendInput 6
 ;	Return
 
 ^6:: ; 
-	Send ^6 ^5
+	SendInput ^6^5
 	Return
 	
 ^7:: ; SWH
 	KeyWait Control
-	Send ^6 ^5 {,} n
+	SendInput ^6^5{,}n
 	Return
 	
 ;+t:: ; SH swap + Res
 ;	KeyWait Shift
-;	Send ^w ^t +t
+;	SendInput ^w^t+t
 ;	Return
 	
 ;+r:: ; SH swap + Divert
 ;	KeyWait Shift
-;	Send ^w ^t +r
+;	SendInput ^w^t+r
 ;	Return
 
-
-`;:: ; Melos entangle
-	Send {,} {`;} {.}
-	Return
-
-=:: ; backwards tc + sc + omni
-	Send z j m ^f
-	Return
-	
-.:: ; double mine
-	Send .
-	Sleep, 50
-	Send .
-	Return
-		
+/*
 -:: ; call familiar + spec
 	MouseGetPos, X, Y
 	BlockInput, MouseMove
 	MouseClick, Left, 1713, 759, 1, 0
 	MouseMove X, Y, 0
 	BlockInput, MouseMoveOff
-	Send {NumpadSub}
+	SendInput {NumpadSub}
 	Return
-/*
+*/
+
 ^1:: ; Incite fear
 	if(spell != 0){
 		MouseGetPos, X, Y
@@ -185,7 +181,7 @@ F9:: ; Brid armor switch
 	}
 	Return
 	
-^3::
+^3:: ; Ruby
 	if(spell != 2){
 		MouseGetPos, X, Y
 		BlockInput, MouseMove
@@ -208,4 +204,3 @@ F9:: ; Brid armor switch
 		spell = 3
 	}
 	Return
-*/
