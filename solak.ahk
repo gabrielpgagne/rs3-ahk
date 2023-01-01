@@ -7,8 +7,17 @@ IfExist, %I_Icon%
 SetKeyDelay, 20, 0
 
 =:: ; backwards tc + sc + omni
-	SendInput zjm^f
+	Send zjm^f
 	Return
+
+/*=:: ; core auto+deto+db+vests
+	SendInput, xc
+	Sleep,20
+	SendInput, q
+	Sleep, 20
+	SendInput, {F8}{F3}{F4}{F5}{F6}{F7}
+	Return
+*/
 	
 .:: ; double mine
 	Send .
@@ -16,6 +25,11 @@ SetKeyDelay, 20, 0
 	Send .
 	Return
 
--:: ;forward tc + vuln + sc + wm
-	Send {Insert}jmf
+/*-:: ;forward tc + vuln + sc + wm
+	SendInput {Insert}jmf
+	Return
+*/
+
+-:: ; range mage start
+	Send, {,}{Insert}mr
 	Return

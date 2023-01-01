@@ -7,6 +7,3 @@ IfExist, %I_Icon%
 
 SetKeyDelay, 20, 0
 
-`;:: ; Melos entangle
-	Send {,}{`;}{.}
-	Return
