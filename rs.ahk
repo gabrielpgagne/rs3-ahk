@@ -10,19 +10,72 @@ IfExist, %I_Icon%
 
 is_in_chat := 0 ; Used to avoid sending macro while typing
 default_wait_time := 30 ; Wait time for game's questionable bind detection [ms]
-grico := 0 ; Indicates if pocket grico cbow is equipped
+grico := 0 ; Pocket grico var
+cbt_style := 1 ; by default == mage
 
 SetKeyDelay, defaultWaitTime, 0
 SetControlDelay, -1
 SetMouseDelay, -1
 
 ; ------------------------------------
+; On-screen locations for clicks and image searches
+
+invy := {
+	"x_left" : 100,
+	"y_top" : 100,
+	"x_right" : 800,
+	"y_bottom" : 800
+}
+
+gear := {
+	"x_left" : 100,
+	"y_top" : 100,
+	"x_right" : 800,
+	"y_bottom" : 800
+}
+
+prayer := {
+	"x_left" : 100,
+	"y_top" : 100,
+	"x_right" : 800,
+	"y_bottom" : 800
+}
+
+melee_pray := { ; center coord
+	"x" : 1500,
+	"y" : 518
+}
+
+range_pray := { ; center coord
+	"x" : 1500,
+	"y" : 518
+}
+
+mage_pray := { ; center coord
+	"x" : 1500,
+	"y" : 518
+}
+
+pray_wrapper := [
+	mage_pray, ; style 0
+	melee_pray ; style 1
+]
+
+cbow := { ; pocket grico location
+	"x" : 1700,
+	"y" : 500
+}
+
+; ------------------------------------
 ; Functions
 
-gricoCheck(){
-	global
-	if(grico = 1){
-		ControlClick, x959 y980, A ; style prayer pos
+gricoCheck(){ ; Called at every weapon switch bind
+	if(grico = 1){ ; Pocket grico currently on
+		if(cbt_style != 2){
+			Random, x, pray_wrapper[cbt_style]["x"]-5, pray_wrapper[cbt_style]["x"]+5
+			Random, y, pray_wrapper[cbt_style]["y"]-5, pray_wrapper[cbt_style]["y"]+5
+			ControlClick, x%x% y%y%, A
+		}
 		grico := 0
 	}
 	Return
@@ -38,7 +91,7 @@ Esc::
 
 Enter::
 	Send, {Enter}
-	is_in_chat := !is_in_chat ; To be tested
+	is_in_chat := !is_in_chat
 	Return
 
 Tab::
@@ -64,7 +117,7 @@ label_bridswitch:
 	SendInput, {F3}{F4}{F5}{F6}{F7}{F8}
 	Return
 
-F10:: ; switch to melee armor + equip cbow
+F10:: ; switch to melee armor then equip cbow
 	Gosub, label_bridswitch
 	Sleep, default_wait_time
 	Gosub, label_grico
@@ -114,11 +167,36 @@ F10:: ; switch to melee armor + equip cbow
 
 ^v:: ; Pocket grico
 label_grico:
-	ControlClick, x1000 y978, A ; cbow pos
-	if(grico = 0){
-		ControlClick, x1702 y518, A ; range pray pos
+	if(grico = 0){ ; Don't execute needlessly
+		
+		ImageSearch, X, Y, mage_pray["x"]-10, mage_pray["x"]+10, mage_pray["y"]-10, mage_pray["y"]+10, "./res/mage_pray_active.png"
+		
+		if(!IsSet(X)){ ; Not found so either melee or range	
+			
+			ImageSearch, X, Y, melee_pray["x"]-10, melee_pray["x"]+10, melee_pray["y"]-10, melee_pray["y"]+10, "./res/melee_pray_active.png"
+			
+			if(!IsSet(X)){ ; Melee not found so range is active
+				cbt_style := 2
+			}
+			else{ ; Melee found
+				cbt_style := 2
+			}
+		}
+
+		else{ ; Mage found
+			cbt_style := 0
+		}
+
+		Random, x, 1695, 1705
+		Random, y, 495, 505
+		ControlClick, x%x% y%y%, A ; random cbow click
+		if(cbt_style != 2){ ; if not range style
+			Random, x, 1510, 1520
+			Random, y, 510, 520
+			ControlClick, x%x% y%y%, A ; range pray click
+		}
+		grico := 1
 	}
-	grico := 1
 	Return
 	
 ^5:: ; Excal + MH
@@ -126,7 +204,7 @@ label_grico:
 	SendInput, ^w^5
 	Return
 	
-^6:: ; Excal + MH
+^6:: ; Excal + BD MH
 	Keywait, 6
 	SendInput, ^6^5
 	Return

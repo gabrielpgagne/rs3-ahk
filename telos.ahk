@@ -5,5 +5,9 @@ IfExist, %I_Icon%
 
 #IfWinActive RuneScape
 
-SetKeyDelay, 20, 0
+SetKeyDelay, 30, 0
 
+=:: ; SC + DW + freedom
+	Send m
+	Send ^e^w
+	Return
