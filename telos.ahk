@@ -6,8 +6,11 @@ IfExist, %I_Icon%
 #IfWinActive RuneScape
 
 SetKeyDelay, 30, 0
+SetControlDelay, -1
+SetMouseDelay, -1
+CoordMode, pixel, Screen
+CoordMode, mouse, Screen
 
 =:: ; SC + DW + freedom
-	Send m
-	Send ^e^w
+	Send m^e^w+c
 	Return

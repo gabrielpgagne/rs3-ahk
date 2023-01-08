@@ -11,24 +11,30 @@ IfExist, %I_Icon%
 SetKeyDelay, 30, 0
 SetControlDelay, -1
 SetMouseDelay, -1
+CoordMode, pixel, Screen
+CoordMode, mouse, Screen
 
-invy_x_left = 100 ; Use img_coord_finder.ahk
-invy_y_top = 100  ; to set inventory position
-invy_x_right = 800
-invy_y_bot = 800
+invy_x_left = 1186 ; Use img_coord_finder.ahk
+invy_y_top = 854  ; to set inventory position
+invy_x_right = 1472
+invy_y_bot = 1000
 
 ; ------------------------------------
 ; Hotkeys
 
 =:: ; Legs / core macro. Changes dynamically if skips/casuals
-	ImageSearch, X, Y, invy_x_left, invy_y_top, invy_x_right, invy_y_bot, %A_WorkingDir%\res\crystal_bow.png, *2 
+	ImageSearch, X, Y, invy_x_left, invy_y_top, invy_x_right, invy_y_bot, *100 C:\Users\darko\Desktop\ahk_rs\res\crystal_bow.png
 	if(ErrorLevel = 1){ ; Couldn't find Crystal Bow. Non-skips
-		ToolTip, Didn't find C Bow ; debug
-		Send, zm^f
+		Send, zjm^f
 	}
 	else{ ; Found crystal Bow, so macro turns into legs deto release
-		ToolTip, Found C Bow, %X%, %Y% ; debug
-		Send, xcq{F3}{F4}{F5}{F6}{F7}{F8}
+		/*ControlClick, x1038 y936, A
+		ControlClick, x1068 y944, A
+		ControlClick, x671 y946, A
+		*/
+		Send, xcq
+		Sleep, 50
+		Send, {F3}{F4}{F5}{F6}{F7}{F8}
 	}
 	Return
 	
