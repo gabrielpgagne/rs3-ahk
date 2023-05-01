@@ -4,143 +4,136 @@
 #SingleInstance Force
 #IfWinActive RuneScape
 
-I_Icon = %A_ScriptDir%\res\rs.ico
-IfExist, %I_Icon%
-	Menu, Tray, Icon, %I_Icon%
+	I_Icon = %A_ScriptDir%\res\rs.ico
+	IfExist, %I_Icon%
+		Menu, Tray, Icon, %I_Icon%
 
+	is_in_chat := 0 ; Used to avoid sending macro while typing
+	default_wait_time := 30 ; Wait time for game's questionable bind detection [ms]
+	grico := 0 ; Pocket grico var
+	cbt_style := 1 ; by default == mage
 
-is_in_chat := 0 ; Used to avoid sending macro while typing
-default_wait_time := 30 ; Wait time for game's questionable bind detection [ms]
-grico := 0 ; Pocket grico var
-cbt_style := 1 ; by default == mage
+	SetKeyDelay, defaultWaitTime, 0
+	SetControlDelay, defaultWaitTime
+	SetMouseDelay, -1
+	CoordMode, pixel, Screen
+	CoordMode, mouse, Screen
 
-SetKeyDelay, defaultWaitTime, 0
-SetControlDelay, -1
-SetMouseDelay, -1
-CoordMode, pixel, Screen
-CoordMode, mouse, Screen
+	; ------------------------------------
+	; On-screen locations for clicks and image searches
 
-; ------------------------------------
-; On-screen locations for clicks and image searches
+	invy := {"x_left" : 1184, "y_top" : 852, "x_right" : 1472, "y_bottom" : 1000}
 
-invy := {"x_left" : 1184, "y_top" : 852, "x_right" : 1472, "y_bottom" : 1000}
+	gear := {"x_left" : 1671, "y_top" : 888, "x_right" : 1917, "y_bottom" : 1034}
 
-gear := {"x_left" : 1671, "y_top" : 888, "x_right" : 1917, "y_bottom" : 1034}
+	prayer := {"x_left" : 1670, "y_top" : 460, "x_right" : 1916, "y_bottom" : 542}
 
-prayer := {"x_left" : 1671, "y_top" : 470, "x_right" : 1916, "y_bottom" : 542}
+	; ------------------------------------
+	; Functions
 
-; ------------------------------------
-; Functions
+	gricoCheck(){ ; Called at every weapon switch bind
+		global
+		if(grico = 1){ ; Pocket grico currently on
+			if(cbt_style = 0){
+				ControlClick, x1739 y524, A
+			}
+			else if(cbt_style = 1){
+				ControlClick, x1885 y487, A
+			}
 
-gricoCheck(){ ; Called at every weapon switch bind
-	global
-	if(grico = 1){ ; Pocket grico currently on
-		if(cbt_style = 0){
-			ControlClick, x1739 y524, A
+			grico := 0
 		}
-		else if(cbt_style = 1){
-			ControlClick, x1885 y487, A
-		}
-
-		grico := 0
+		Return
 	}
-	Return
-}
 
-; ------------------------------------
-; Chatbox Hotkeys
+	; ------------------------------------
+	; Chatbox Hotkeys
 
-Esc::
-	Send, {Esc}
-	is_in_chat := 0
+	Esc::
+		Send, {Esc}
+		is_in_chat := 0
 	Return
 
-Enter::
-	Send, {Enter}
-	is_in_chat := !is_in_chat
+	Enter::
+		Send, {Enter}
+		is_in_chat := !is_in_chat
 	Return
 
-Tab::
-	Send, {Tab}
-	is_in_chat := 1
+	Tab::
+		Send, {Tab}
+		is_in_chat := 1
 	Return
 
-; ------------------------------------
-; Misc Hotkeys
+	; ------------------------------------
+	; Misc Hotkeys
 
-^0:: ; Quit RS3, AHK and Alt1
-	Process, Close, rs2client.exe
-	Process, Close, Runeapps.Alt1.exe
-	Process, Close, JagexLauncher.exe
+	^0:: ; Quit RS3, AHK and Alt1
+		Process, Close, rs2client.exe
+		Process, Close, Runeapps.Alt1.exe
+		Process, Close, JagexLauncher.exe
 	ExitApp
 
-; ------------------------------------
-; PVM Hotkeys
+	; ------------------------------------
+	; PVM Hotkeys
 
-F9:: ; Brid armor switch
-label_bridswitch:
-	grico := 0
-	SendInput, {F3}{F4}{F5}{F6}{F7}{F8}
+	F9:: ; Brid armor switch
+	label_bridswitch:
+		grico := 0
+		SendInput, {F3}{F4}{F5}{F6}{F7}{F8}
 	Return
 
-F10:: ; switch to melee armor then equip cbow
-	Gosub, label_bridswitch
-	cbt_style := 1
-	grico := 1
-	ControlClick, x998 y981, A ; cbow
-	ControlClick, x1699 y520, A ; range pray click
+	F10:: ; switch to melee armor then equip cbow
+		Gosub, label_bridswitch
+		cbt_style := 1
+		grico := 1
+		ControlClick, x998 y981, A ; cbow
+		ControlClick, x1699 y520, A ; range pray click
 	Return
 
-^q:: ; 2H
-	Keywait, q
-	SendInput, ^q
-	gricoCheck()
+	^q:: ; 2H
+		Send, ^q
+		gricoCheck()
 	Return
 
-^w:: ; MH
-	Keywait, w
-	SendInput, ^w
-	gricoCheck()
-	Return
-	
-^e:: ; MH + OH
-	KeyWait, e
-	SendInput, ^w^e
-	gricoCheck()
+	^w:: ; MH + OH
+		Send, ^w^e
+		gricoCheck()
 	Return
 
-^r:: ; 2nd 2H
-	KeyWait, r
-	SendInput, ^r
-	gricoCheck()
+	^e:: ; MH + OH
+		Send, ^w^e
+		gricoCheck()
 	Return
 
-^t:: ; MH + Shield
-	KeyWait, t
-	SendInput, ^w^t
-	gricoCheck()
+	^r:: ; 2nd 2H
+		Send, ^r
+		gricoCheck()
 	Return
 
-^d:: ; 2nd MH + OH
-	KeyWait, d
-	SendInput, ^e^d
-	gricoCheck()
-	Return
-	
-^s:: ; MH + Flank
-	KeyWait, s
-	SendInput, ^w^s
-	gricoCheck()
+	^t:: ; MH + Shield
+		Send, ^w^t
+		gricoCheck()
 	Return
 
-^v:: ; Pocket grico
-	if(grico = 0){ ; Don't execute needlessly
-		ImageSearch, X, Y, prayer["x_left"], prayer["y_top"], prayer["x_right"], prayer["y_bottom"], C:\Users\darko\Desktop\ahk_rs\res\mage_pray_active.png
+	^d:: ; 2nd MH + OH
+		Send, ^e^d
+		gricoCheck()
+	Return
+	/*
+	^s:: ; MH + Flank
+		KeyWait, s
+		SendInput, ^w^s
+		gricoCheck()
+		Return
+	*/
 
-		if(ErrorLevel = 1){ ; Not found so either melee or range	
-			
-			ImageSearch, X, Y, prayer["x_left"], prayer["y_top"], prayer["x_right"], prayer["y_bottom"], C:\Users\darko\Desktop\ahk_rs\res\melee_pray_active.png
-			
+	^v:: ; Pocket grico
+		ImageSearch, X, Y, gear["x_left"], gear["y_top"], gear["x_right"], gear["y_bottom"], *50 C:\Users\darko\Desktop\ahk_rs\res\mage_armor.png
+
+		if(ErrorLevel = 1){ ; Not found so either melee or range
+
+			ImageSearch, X, Y, gear["x_left"], gear["y_top"], gear["x_right"], gear["y_bottom"], *50 C:\Users\darko\Desktop\ahk_rs\res\melee_armor.png
+
 			if(ErrorLevel = 1){ ; Melee not found so range is active
 				cbt_style := 2
 			}
@@ -152,54 +145,75 @@ F10:: ; switch to melee armor then equip cbow
 		else{ ; Mage found
 			cbt_style := 0
 		}
-
 		ControlClick, x998 y981, A ; cbow
 		if(cbt_style != 2){ ; if not range style
 			ControlClick, x1695 y520, A ; range pray click
 		}
 		grico := 1
-	}
-	Return
-	
-^5:: ; Excal + MH
-	Keywait, 5
-	SendInput, ^w^5
-	Return
-	
-^6:: ; Excal + BD MH
-	Keywait, 6
-	SendInput, ^6^5
 	Return
 
-+w:: ; Eat solid food
-	KeyWait, w
-	SendInput, +w
+	^b:: ; ice barr
+		ControlClick, x1034 y984, A
 	Return
 
-+e:: ; Sip brew
-	KeyWait, e
-	SendInput, +e
+	^5:: ; Excal + MH
+		Send, ^w^5
 	Return
 
-+t:: ; Reso + auto shield switch
-	ControlClick, x706 y979, A ; wand pos
-	ControlClick, x855 y977, A ; shield pos
-	ControlClick, x1006 y834, A ; reso pos
-	Return
-
-+r:: ; Divert + auto shield switch
-	ControlClick, x706 y979, A ; wand pos
-	ControlClick, x855 y977, A ; shield pos
-	ControlClick, x1044 y830, A ; divert
-	Return
-
-k:: ; SWH
-	if(is_in_chat = 0){
+	^6:: ; Excal + BD MH
 		Send, ^6^5
-		Sleep, default_wait_time
-		Send, ,n
-	}
-	else{
-		Send, k
-	}
+	Return
+
+	+w:: ; Eat solid food
+		ControlClick, x962 y1019, A ; fish
+	Return
+
+	+e:: ; Sip brew
+		ControlClick, x1003 y1018, A ; brew
+	Return
+
+	+t:: ; Reso + auto shield switch
+		ControlClick, x706 y979, A ; wand pos
+		ControlClick, x855 y977, A ; shield pos
+		ControlClick, x1006 y834, A ; reso pos
+	Return
+
+	+r:: ; Divert + auto shield switch
+		ControlClick, x706 y979, A ; wand pos
+		ControlClick, x855 y977, A ; shield pos
+		ControlClick, x1044 y830, A ; divert
+	Return
+
+	+s:: ; Reflect + auto shield switch
+		ControlClick, x706 y979, A ; wand pos
+		ControlClick, x855 y977, A ; shield pos
+		ControlClick, x1005 y864, A ; reflect
+	Return
+
+	+x:: ; preparation + auto shield switch
+		ControlClick, x706 y979, A ; wand pos
+		ControlClick, x855 y977, A ; shield pos
+		ControlClick, x1078 y830, A ; divert
+	Return
+
+	k:: ; SWH
+		if(!is_in_chat){
+			Send, ^6^5
+			ControlClick, x925 y1016, A ; IOTH
+			ControlClick, x890 y1020, A ; EOF spec
+		}
+		else{
+			Send, k
+		}
+	Return
+
+	u:: ; bb + dw switch + gconc yolo
+		if(!is_in_chat){
+			ControlClick, x1033 y943, A ; bb
+			Send, ^e^w
+			ControlClick, x710 y946, A ; IOTH
+		}
+		else{
+			Send, u
+		}
 	Return

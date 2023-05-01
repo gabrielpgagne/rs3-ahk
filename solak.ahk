@@ -44,6 +44,13 @@ invy_y_bot = 1000
 	Send .
 	Return
 
+-:: ; duo start, tc + sc + shard
+	Send {Insert}m
+	ControlClick, x1116 y865, A
+	Return
+	
+
+
 /*-:: ;forward tc + vuln + sc + wm
 	SendInput {Insert}jmf
 	Return
