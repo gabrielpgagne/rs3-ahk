@@ -128,20 +128,25 @@
 	*/
 
 	^v:: ; Pocket grico
-		ImageSearch, X, Y, gear["x_left"], gear["y_top"], gear["x_right"], gear["y_bottom"], *50 C:\Users\darko\Desktop\ahk_rs\res\mage_armor.png
+		ImageSearch, X, Y, gear["x_left"], gear["y_top"], gear["x_right"], gear["y_bottom"], *50 .\res\mage_armor.png
 
 		if(ErrorLevel = 1){ ; Not found so either melee or range
 
-			ImageSearch, X, Y, gear["x_left"], gear["y_top"], gear["x_right"], gear["y_bottom"], *50 C:\Users\darko\Desktop\ahk_rs\res\melee_armor.png
+			ImageSearch, X, Y, gear["x_left"], gear["y_top"], gear["x_right"], gear["y_bottom"], *50 .\res\melee_armor.png
 
 			if(ErrorLevel = 1){ ; Melee not found so range is active
 				cbt_style := 2
+			}
+			else if(ErrorLevel = 2){
+				ToolTip, "Could not find melee_armor.png in rs.ahk. Check paths."
 			}
 			else{ ; Melee found
 				cbt_style := 1
 			}
 		}
-
+		else if(ErrorLevel = 2){
+			ToolTip, "Could not find mage_armor.png in rs.ahk. Check paths."
+		}
 		else{ ; Mage found
 			cbt_style := 0
 		}
