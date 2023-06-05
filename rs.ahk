@@ -71,7 +71,12 @@
 		Process, Close, rs2client.exe
 		Process, Close, Runeapps.Alt1.exe
 		Process, Close, JagexLauncher.exe
-	ExitApp
+
+		Loop {
+			Process, Close, Autohotkey.exe
+			If (ErrorLevel = 0)
+			   Break     ;No [more] matching processes found
+		 }
 
 	; ------------------------------------
 	; PVM Hotkeys
