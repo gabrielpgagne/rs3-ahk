@@ -17,8 +17,9 @@
 	; ------------------------------------
 	; Hotkeys
 
-	=:: ; Core macro.
-		Send, zjm^f
+	=:: ; Core macro
+		Send, zjm^w^e
+		ControlClick, x704 y942, A
 	Return
 
 	.:: ; double mine
@@ -31,8 +32,3 @@
 		Send {Insert}m
 		ControlClick, x1116 y865, A
 	Return
-
-	/*-:: ;forward tc + vuln + sc + wm
-		SendInput {Insert}jmf
-		Return
-	*/

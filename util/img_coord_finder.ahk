@@ -9,7 +9,7 @@
 ; comment the next line if you want to see x,y as window relative coords
 
 CoordMode, mouse, Screen
-
+CoordMode, pixel, Screen
 
 
 SetTimer, show, 10
